@@ -1,6 +1,6 @@
 import Box
 
-public enum Parser<T> {
+public enum ParseResult<T> {
   case Success(Box<T>)
   case TypeMismatch(String)
   case MissingKey(String)
@@ -12,7 +12,7 @@ public enum Parser<T> {
     }
   }
 
-  public static func optional<A>(p: Parser<A>) -> Parser<A?> {
+  public static func optional<A>(p: ParseResult<A>) -> ParseResult<A?> {
     switch p {
     case let .Success(box): return .Success(Box(.Some(box.value)))
     case let .MissingKey(string): return .Success(Box(.None))

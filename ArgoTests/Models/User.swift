@@ -12,7 +12,7 @@ extension User: JSONDecodable {
     return User(id: id, name: name, email: email)
   }
 
-  static func fromJSON(j: JSON) -> Parser<User> {
+  static func fromJSON(j: JSON) -> ParseResult<User> {
     return User.create
       <^> j <| "id"
       <*> j <| "name"

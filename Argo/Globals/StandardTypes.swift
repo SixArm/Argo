@@ -2,7 +2,7 @@ import Foundation
 import Runes
 
 extension String: JSONDecodable {
-  public static func fromJSON(j: JSON) -> Parser<String> {
+  public static func fromJSON(j: JSON) -> ParseResult<String> {
     switch j {
     case let .String(s): return pure(s)
     default: return typeMismatch("String", j)
@@ -11,7 +11,7 @@ extension String: JSONDecodable {
 }
 
 extension Int: JSONDecodable {
-  public static func fromJSON(j: JSON) -> Parser<Int> {
+  public static func fromJSON(j: JSON) -> ParseResult<Int> {
     switch j {
     case let .Number(n): return pure(n as Int)
     default: return typeMismatch("Int", j)
@@ -20,7 +20,7 @@ extension Int: JSONDecodable {
 }
 
 extension Double: JSONDecodable {
-  public static func fromJSON(j: JSON) -> Parser<Double> {
+  public static func fromJSON(j: JSON) -> ParseResult<Double> {
     switch j {
     case let .Number(n): return pure(n as Double)
     default: return typeMismatch("Double", j)
@@ -29,7 +29,7 @@ extension Double: JSONDecodable {
 }
 
 extension Bool: JSONDecodable {
-  public static func fromJSON(j: JSON) -> Parser<Bool> {
+  public static func fromJSON(j: JSON) -> ParseResult<Bool> {
     switch j {
     case let .Number(n): return pure(n as Bool)
     default: return typeMismatch("Bool", j)
@@ -38,7 +38,7 @@ extension Bool: JSONDecodable {
 }
 
 extension Float: JSONDecodable {
-  public static func fromJSON(j: JSON) -> Parser<Float> {
+  public static func fromJSON(j: JSON) -> ParseResult<Float> {
     switch j {
     case let .Number(n): return pure(n as Float)
     default: return typeMismatch("Float", j)
@@ -46,20 +46,20 @@ extension Float: JSONDecodable {
   }
 }
 
-public func decodeArray<A where A: JSONDecodable, A == A.DecodedType>(value: JSON) -> Parser<[A]> {
+public func decodeArray<A where A: JSONDecodable, A == A.DecodedType>(value: JSON) -> ParseResult<[A]> {
   switch value {
   case let .Array(a): return sequence(a.map { A.fromJSON($0) })
   default: return typeMismatch("Array", value)
   }
 }
 
-public func decodeObject<A where A: JSONDecodable, A == A.DecodedType>(value: JSON) -> Parser<[String: A]> {
+public func decodeObject<A where A: JSONDecodable, A == A.DecodedType>(value: JSON) -> ParseResult<[String: A]> {
   switch value {
   case let .Object(o): return sequence(o.map { A.fromJSON($0) })
   default: return typeMismatch("Object", value)
   }
 }
 
-private func typeMismatch<T>(expectedType: String, object: JSON) -> Parser<T> {
+private func typeMismatch<T>(expectedType: String, object: JSON) -> ParseResult<T> {
   return .TypeMismatch("\(object) is not a \(expectedType)")
 }
