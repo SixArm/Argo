@@ -13,7 +13,7 @@ extension Post: JSONDecodable {
     return Post(id: id, text: text, author: author, comments: comments)
   }
 
-  static func fromJSON(j: JSON) -> ParseResult<Post> {
+  static func decode(j: JSON) -> DecodeResult<Post> {
     return Post.create
       <^> j <| "id"
       <*> j <| "text"

@@ -1,7 +1,7 @@
 import Runes
 import Box
 
-public func >>-<A, B>(a: ParseResult<A>, f: A -> ParseResult<B>) -> ParseResult<B> {
+public func >>-<A, B>(a: DecodeResult<A>, f: A -> DecodeResult<B>) -> DecodeResult<B> {
   switch a {
   case let .Success(box): return f(box.value)
   case let .MissingKey(string): return .MissingKey(string)
@@ -9,7 +9,7 @@ public func >>-<A, B>(a: ParseResult<A>, f: A -> ParseResult<B>) -> ParseResult<
   }
 }
 
-public func <^><A, B>(f: A -> B, a: ParseResult<A>) -> ParseResult<B> {
+public func <^><A, B>(f: A -> B, a: DecodeResult<A>) -> DecodeResult<B> {
   switch a {
   case let .Success(box): return .Success(Box(f(box.value)))
   case let .MissingKey(string): return .MissingKey(string)
@@ -17,7 +17,7 @@ public func <^><A, B>(f: A -> B, a: ParseResult<A>) -> ParseResult<B> {
   }
 }
 
-public func <*><A, B>(f: ParseResult<A -> B>, a: ParseResult<A>) -> ParseResult<B> {
+public func <*><A, B>(f: DecodeResult<A -> B>, a: DecodeResult<A>) -> DecodeResult<B> {
   switch f {
   case let .Success(box): return box.value <^> a
   case let .MissingKey(string): return .MissingKey(string)
@@ -25,6 +25,6 @@ public func <*><A, B>(f: ParseResult<A -> B>, a: ParseResult<A>) -> ParseResult<
   }
 }
 
-public func pure<A>(a: A) -> ParseResult<A> {
+public func pure<A>(a: A) -> DecodeResult<A> {
   return .Success(Box(a))
 }

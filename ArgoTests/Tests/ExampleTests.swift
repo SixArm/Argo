@@ -4,7 +4,7 @@ import Runes
 
 class ExampleTests: XCTestCase {
   func testJSONWithRootArray() {
-    let stringArray: [String]? = JSONFileReader.JSON(fromFile: "array_root") >>- decode
+    let stringArray: [String]? = JSONFileReader.JSON(fromFile: "array_root") >>- parse
 
     XCTAssertNotNil(stringArray)
     XCTAssertEqual(stringArray!, ["foo", "bar", "baz"])

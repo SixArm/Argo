@@ -20,7 +20,7 @@ class SwiftDictionaryDecodingTests: XCTestCase {
       ]
     ]
 
-    let model: TestModel? = decode(typesDict)
+    let model: TestModel? = parse(typesDict)
 
     XCTAssert(model != nil)
     XCTAssert(model?.int == 5)
